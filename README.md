@@ -1,6 +1,38 @@
 # Nyx Crash 💜
 
-Projeto independente de bot para WhatsApp em Node.js com Baileys. Esta cópia será reorganizada em módulos por categoria de permissões.
+Projeto independente de bot para WhatsApp em Node.js com Baileys. Os comandos podem ser criados como módulos individuais e carregados automaticamente por categoria.
+
+## Criar um novo comando
+
+Não é necessário editar `index.js`, `handler.js` ou registrar o comando manualmente.
+
+1. Escolha a pasta de permissão:
+   - `src/commands/member/`: qualquer pessoa que possa usar o bot.
+   - `src/commands/admin/`: administradores do grupo.
+   - `src/commands/owner/`: dono oficial ou dono adicional autorizado.
+2. Crie um arquivo terminado em `.js`, por exemplo `meucomando.js`.
+3. Use este modelo:
+
+```js
+export default {
+  name: "meucomando",
+  description: "Descrição do comando",
+  commands: ["meucomando", "mc"],
+  usage: "!meucomando",
+
+  async handle({ sock, message, args, reply }) {
+    await reply("Meu primeiro comando personalizado!");
+  }
+};
+```
+
+4. Salve o arquivo e reinicie o bot. O carregador encontra o módulo e registra o comando e seus aliases automaticamente.
+
+A propriedade `commands` contém todos os nomes que acionam o mesmo comando. O campo `name` é o nome principal. A função `handle` recebe o contexto do comando, incluindo `sock`, `message`, `args`, `reply`, `senderJid`, `chatJid`, `isGroup` e informações de permissão.
+
+**Importante:** comandos colocados em `admin` e `owner` recebem validação de permissão pelo próprio sistema. Não remova verificações adicionais necessárias para a ação específica (por exemplo, confirmar que o bot também é administrador antes de alterar configurações do grupo).
+
+O carregador percorre subpastas, ignora arquivos cujo nome começa com `_` e registra erros de importação sem impedir o carregamento dos demais módulos.
 
 ## Instalação no Termux
 
@@ -11,7 +43,7 @@ pkg update && pkg upgrade
 pkg install nodejs git
 ```
 
-Depois, execute esta sequência para baixar o projeto, instalar as dependências, criar e editar o arquivo `.env`, verificar o código e iniciar o bot:
+Baixe o projeto, instale as dependências e configure o arquivo `.env`:
 
 ```bash
 cd ~
@@ -30,20 +62,6 @@ Na primeira execução, preencha e salve o arquivo `.env` antes de continuar. Se
 
 O arquivo `.env` guarda configurações privadas da sua instalação. Ele não é enviado ao GitHub. O repositório fornece um modelo chamado `.env.example`.
 
-1. Crie seu arquivo local copiando o modelo:
-
-```bash
-cp .env.example .env
-```
-
-2. Abra o arquivo para edição:
-
-```bash
-nano .env
-```
-
-3. Preencha as configurações:
-
 | Variável | O que colocar |
 | --- | --- |
 | `OWNER_NUMBER` | Seu número de WhatsApp com código do país e DDD, somente dígitos. No Brasil: `55 + DDD + número`. |
@@ -54,16 +72,7 @@ nano .env
 
 Exemplo de número fictício: `5554991234567`. Substitua pelo seu número real; não inclua `+`, espaços ou traços.
 
-4. Salve no nano com `Ctrl + O`, confirme com Enter e saia com `Ctrl + X`.
-
-5. Valide a sintaxe e inicie o bot:
-
-```bash
-npm run check
-npm start
-```
-
-Siga as instruções exibidas no terminal para conectar o WhatsApp em **Aparelhos conectados**. Nunca compartilhe seu código de pareamento.
+Salve no nano com `Ctrl + O`, confirme com Enter e saia com `Ctrl + X`. Siga as instruções exibidas no terminal para conectar o WhatsApp em **Aparelhos conectados**. Nunca compartilhe seu código de pareamento.
 
 ## Atualizar o bot
 
@@ -77,19 +86,6 @@ npm start
 ```
 
 Se houver alterações locais que impeçam o `git pull`, faça backup do que deseja preservar antes de descartar ou substituir arquivos.
-
-## Comandos disponíveis
-
-- `!menu`, `!ping`, `!runtime`, `!about`, `!owner`
-- `!choose opção A | opção B`, `!8ball pergunta`
-- `!groupinfo`, `!tagall` (admin)
-- `!kick`, `!promote`, `!demote` (admin)
-- `!link`, `!revoke`, `!subject`, `!desc` (admin)
-- `!closegroup`, `!opengroup`, `!welcome on/off`, `!antilink on/off` (admin)
-- `!warn`, `!note add/get/list/del` (admin)
-- `!say`, `!chatid`, `!botname` (dono)
-
-O prefixo padrão é `!`. Para personalizá-lo, altere `BOT_PREFIX` no arquivo `.env`.
 
 ## Sessão, dados e segurança
 

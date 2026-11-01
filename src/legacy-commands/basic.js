@@ -154,7 +154,7 @@ registerCommand({
       'VERSION:3.0',
       'N:Nyx;' + config.ownerName + ';;;',
       'FN:' + config.ownerName,
-      'TEL;type=CELL;type=VOICE;waid=' + config.ownerNumber + ':+ ' + config.ownerNumber,
+      'TEL;type=CELL;type=VOICE;waid=' + config.ownerNumber + ':+' + config.ownerNumber,
       'END:VCARD',
     ].join('\n');
     await sock.sendMessage(

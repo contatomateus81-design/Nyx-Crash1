@@ -1,13 +1,8 @@
-import '../../legacy-commands/owner.js';
-import { getCommand, registerCommand } from '../../handler.js';
-const commandName = "botname";
-const implementation = getCommand(commandName);
-registerCommand({ name: commandName, aliases: ["nomebot"], role: "dono", async execute(ctx) {
-  switch (ctx.command) {
-    case commandName:
-      if (!implementation) throw new Error('Implementação não encontrada: ' + commandName);
-      return implementation.execute(ctx);
-    default:
-      return ctx.reply('Comando não reconhecido neste arquivo.');
-  }
-} });
+import { config } from "../../config.js";
+export default {
+  name: "botname",
+  description: "Mostra o nome configurado para o bot.",
+  commands: ["botname", "nomebot"],
+  usage: "!botname",
+  async handle({ reply }) { await reply(`Nome configurado: ${config.name}.`); }
+};

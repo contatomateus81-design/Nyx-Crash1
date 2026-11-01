@@ -152,14 +152,14 @@ registerCommand({
     const vcard = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      'N:Nyx;Criador Oficial;;;',
-      'FN:Criador Oficial do Nyx Bot',
-      'TEL;type=CELL;type=VOICE;waid=555481296959:+555481296959',
+      'N:Nyx;' + config.ownerName + ';;;',
+      'FN:' + config.ownerName,
+      'TEL;type=CELL;type=VOICE;waid=' + config.ownerNumber + ':+ ' + config.ownerNumber,
       'END:VCARD',
     ].join('\n');
     await sock.sendMessage(
       chatJid,
-      { contacts: { displayName: 'Criador Oficial do Nyx Bot', contacts: [{ vcard }] } },
+      { contacts: { displayName: config.ownerName, contacts: [{ vcard }] } },
       { quoted: message },
     );
   },

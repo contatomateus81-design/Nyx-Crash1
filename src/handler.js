@@ -7,6 +7,8 @@ export function getRegisteredCommandCount() {
   return new Set(commands.values()).size;
 }
 
+export function getCommand(name) { return commands.get(String(name ?? '').toLowerCase()); }
+
 export function registerCommand(command) {
   if (!command?.name || typeof command.execute !== 'function') {
     throw new TypeError('Comando inválido: informe name e execute().');
@@ -25,7 +27,7 @@ export async function runCommandForTest(context, name, args = []) {
     await context.reply('🔒 Esse comando é exclusivo do dono.');
     return { found: true, blocked: true };
   }
-  await command.execute({ ...context, args });
+  await command.execute({ ...context, command: command.name, args });
   return { found: true };
 }
 
@@ -80,6 +82,7 @@ export async function handleMessage(sock, message) {
   }
 
   const context = {
+    command: command.name,
     sock, message, args, senderJid, senderNumber, isOwner, isOfficialOwner, isGroup,
     chatJid: message.key.remoteJid,
     commandStartedAt,

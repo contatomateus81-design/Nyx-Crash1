@@ -1,5 +1,10 @@
-import '../../legacy-commands/crash.js';
-import { getCommand, registerCommand } from '../../handler.js';
-const commandName = 'crash';
-const implementation = getCommand(commandName);
-registerCommand({ name: commandName, aliases: ['testeerro'], role: 'dono', async execute(ctx) { switch(ctx.command) { case commandName: if(!implementation) throw new Error('Implementação de diagnóstico não encontrada.'); return implementation.execute(ctx); default: return ctx.reply('Comando não reconhecido.'); } } });
+export default {
+  name: "crash",
+  description: "Executa um diagnóstico seguro do tratamento de erros.",
+  commands: ["crash", "testeerro"],
+  usage: "!crash [erro]",
+  async handle({ reply, args }) {
+    if (String(args?.[0] ?? "").toLowerCase() === "erro") throw new Error("Falha simulada pelo comando crash.");
+    await reply("🧪 Teste seguro concluído!\n\n✅ O comando foi carregado e executado.\n🛡️ Nenhuma mensagem pesada foi enviada e o bot não foi travado.\n\nPara testar o tratamento de erros, use crash erro.");
+  }
+};

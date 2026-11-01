@@ -1,6 +1,6 @@
-# Nyx-Bot-WA 💜
+# Nyx Crash 💜
 
-Bot de WhatsApp em Node.js com Baileys, pareamento por código, comandos modulares, moderação de grupos e configurações persistentes.
+Projeto independente de bot para WhatsApp em Node.js com Baileys. Esta cópia será reorganizada em módulos por categoria de permissões.
 
 ## Instalação no Termux
 
@@ -15,8 +15,8 @@ Depois, execute esta sequência para baixar o projeto, instalar as dependências
 
 ```bash
 cd ~
-git clone https://github.com/contatomateus81-design/Nyx-Bot-WA.git
-cd Nyx-Bot-WA
+git clone https://github.com/contatomateus81-design/Nyx-Crash1.git
+cd Nyx-Crash1
 npm install
 cp .env.example .env
 nano .env

@@ -46,11 +46,11 @@ registerCommand({
       return reply(`✂️ O texto pode ter no máximo ${MAX_TEXT_LENGTH} caracteres por áudio.`);
     }
 
-    const model = process.env.PIPER_MODEL;
-    const piperBin = process.env.PIPER_BIN || 'piper';
-    const ffmpegBin = process.env.FFMPEG_BIN || 'ffmpeg';
+    const model = config.piperModel;
+    const piperBin = config.piperBin || 'piper';
+    const ffmpegBin = config.ffmpegBin || 'ffmpeg';
     if (!model) {
-      return reply('⚙️ O TTS neural ainda não está configurado. Defina PIPER_MODEL no .env com o caminho completo do modelo Piper .onnx.');
+      return reply('⚙️ O TTS neural ainda não está configurado. Configure config.piperModel em src/config.js com o caminho completo do modelo Piper .onnx.');
     }
 
     const workDir = join(tmpdir(), `nyx-tts-${randomUUID()}`);

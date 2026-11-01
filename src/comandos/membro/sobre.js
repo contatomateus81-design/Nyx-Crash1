@@ -1,4 +1,4 @@
-import '../legacy-commands/basic.js';
+import '../../legacy-commands/basic.js';
 import { getCommand, registerCommand } from '../../handler.js';
 
 const commandName = "sobre";

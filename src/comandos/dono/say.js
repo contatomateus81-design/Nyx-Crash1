@@ -1,13 +1,11 @@
-import '../../legacy-commands/owner.js';
-import { getCommand, registerCommand } from '../../handler.js';
-const commandName = "say";
-const implementation = getCommand(commandName);
-registerCommand({ name: commandName, aliases: ["dizer"], role: "dono", async execute(ctx) {
-  switch (ctx.command) {
-    case commandName:
-      if (!implementation) throw new Error('Implementação não encontrada: ' + commandName);
-      return implementation.execute(ctx);
-    default:
-      return ctx.reply('Comando não reconhecido neste arquivo.');
+import { config } from "../../config.js";
+export default {
+  name: "say",
+  description: "Faz a Nyx repetir uma mensagem.",
+  commands: ["say", "dizer"],
+  usage: "!say mensagem",
+  async handle({ reply, args }) {
+    if (!args.length) return reply(`Uso: ${config.prefix}say <mensagem>`);
+    await reply(args.join(" "));
   }
-} });
+};

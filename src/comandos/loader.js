@@ -27,8 +27,11 @@ export async function loadCommands() {
     for (const filePath of await findCommandFiles(join(root, category.name))) {
       try {
         const imported = await import(pathToFileURL(filePath).href);
+        // Módulos antigos de compatibilidade podem registrar comandos por efeito colateral.
+        // Eles serão substituídos por módulos default-export conforme a migração terminar.
+        if (!imported.default) continue;
         const command = imported.default;
-        if (!command || typeof command.handle !== "function" || !command.name || !Array.isArray(command.commands)) {
+        if (typeof command.handle !== "function" || !command.name || !Array.isArray(command.commands)) {
           throw new TypeError("O módulo precisa exportar default com name, commands[] e handle().");
         }
         registerCommand({ ...command, role });

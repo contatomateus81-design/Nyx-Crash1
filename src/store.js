@@ -3,7 +3,7 @@ import { dirname } from 'node:path';
 const filePath = 'data/store.json';
 let cache;
 let writeQueue = Promise.resolve();
-const defaults = { groups: {}, users: {}, notes: {}, delegatedOwners: [] };
+const defaults = { groups: {}, users: {}, notes: {}, delegatedOwners: [], botPaused: false };
 async function load() {
   if (cache) return cache;
   await mkdir(dirname(filePath), { recursive: true });
@@ -23,6 +23,9 @@ export async function updateUser(jid, patch) { const user = await getUser(jid); 
 export async function listNotes(jid) { const data = await load(); return data.notes[jid] ?? {}; }
 export async function setNote(jid, key, value) { const data = await load(); data.notes[jid] ??= {}; data.notes[jid][key] = value; await persist(); }
 export async function deleteNote(jid, key) { const data = await load(); if (!data.notes[jid] || !(key in data.notes[jid])) return false; delete data.notes[jid][key]; await persist(); return true; }
+
+export async function isBotPaused() { const data = await load(); return data.botPaused === true; }
+export async function setBotPaused(paused) { const data = await load(); data.botPaused = Boolean(paused); await persist(); return data.botPaused; }
 
 export async function getDelegatedOwners() {
   const data = await load();

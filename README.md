@@ -1,17 +1,34 @@
 # Nyx Crash 💜
 
-Projeto independente de bot para WhatsApp em Node.js com Baileys. Os comandos podem ser criados como módulos individuais e carregados automaticamente por categoria.
+Bot independente para WhatsApp, desenvolvido com Node.js e Baileys.
 
-## Criar um novo comando
+## Configuração
 
-Não é necessário editar `index.js`, `handler.js` ou registrar o comando manualmente.
+As configurações ficam em **`src/config.js`**. Não é necessário criar arquivo `.env`.
 
-1. Escolha a pasta de permissão:
-   - `src/commands/member/`: qualquer pessoa que possa usar o bot.
-   - `src/commands/admin/`: administradores do grupo.
-   - `src/commands/owner/`: dono oficial ou dono adicional autorizado.
-2. Crie um arquivo terminado em `.js`, por exemplo `meucomando.js`.
-3. Use este modelo:
+Edite os campos no início do arquivo:
+
+- `name`: nome do bot.
+- `ownerName`: nome do proprietário.
+- `ownerNumber`: número do proprietário com DDI e DDD, somente dígitos.
+- `prefix`: prefixo dos comandos.
+- `piperModel`, `piperBin` e `ffmpegBin`: configurações opcionais de voz e mídia.
+
+Exemplo de número brasileiro: `5511999999999`. Substitua pelo número correto da sua instalação. Não publique dados pessoais ao compartilhar capturas de tela ou cópias personalizadas do arquivo.
+
+## Estrutura dos comandos
+
+Os comandos novos ficam em:
+
+```text
+src/
+└── comandos/
+    ├── membro/
+    ├── admin/
+    └── dono/
+```
+
+Cada comando independente usa este formato:
 
 ```js
 export default {
@@ -26,75 +43,40 @@ export default {
 };
 ```
 
-4. Salve o arquivo e reinicie o bot. O carregador encontra o módulo e registra o comando e seus aliases automaticamente.
+O carregador percorre as três categorias ao iniciar. A pasta define a permissão: `membro` para usuários, `admin` para administradores do grupo e `dono` para o proprietário. Depois de criar um módulo, reinicie o bot para carregá-lo.
 
-A propriedade `commands` contém todos os nomes que acionam o mesmo comando. O campo `name` é o nome principal. A função `handle` recebe o contexto do comando, incluindo `sock`, `message`, `args`, `reply`, `senderJid`, `chatJid`, `isGroup` e informações de permissão.
-
-**Importante:** comandos colocados em `admin` e `owner` recebem validação de permissão pelo próprio sistema. Não remova verificações adicionais necessárias para a ação específica (por exemplo, confirmar que o bot também é administrador antes de alterar configurações do grupo).
-
-O carregador percorre subpastas, ignora arquivos cujo nome começa com `_` e registra erros de importação sem impedir o carregamento dos demais módulos.
+**Migração em andamento:** alguns comandos antigos ainda usam módulos de compatibilidade. Eles serão convertidos para o formato independente antes de remover completamente essa camada.
 
 ## Instalação no Termux
-
-Atualize os pacotes e instale Node.js e Git:
 
 ```bash
 pkg update && pkg upgrade
 pkg install nodejs git
-```
-
-Baixe o projeto, instale as dependências e configure o arquivo `.env`:
-
-```bash
-cd ~
 git clone https://github.com/contatomateus81-design/Nyx-Crash1.git
 cd Nyx-Crash1
 npm install
-cp .env.example .env
-nano .env
+```
+
+Depois, edite `src/config.js` e execute:
+
+```bash
 npm run check
 npm start
 ```
 
-Na primeira execução, preencha e salve o arquivo `.env` antes de continuar. Se `npm run check` apontar erros, corrija-os antes de iniciar o bot.
-
-## Configuração do arquivo .env
-
-O arquivo `.env` guarda configurações privadas da sua instalação. Ele não é enviado ao GitHub. O repositório fornece um modelo chamado `.env.example`.
-
-| Variável | O que colocar |
-| --- | --- |
-| `OWNER_NUMBER` | Seu número de WhatsApp com código do país e DDD, somente dígitos. No Brasil: `55 + DDD + número`. |
-| `BOT_PREFIX` | Prefixo dos comandos. O padrão é `!`. |
-| `BOT_NAME` | Nome exibido para o bot. O padrão é `Nyx Bot`. |
-| `GEMINI_API_KEY` | Chave da API Gemini, caso utilize a integração correspondente. Deixe vazia se não usar. |
-| `GEMINI_MODEL` | Modelo Gemini configurado para a integração, se utilizada. |
-
-Exemplo de número fictício: `5554991234567`. Substitua pelo seu número real; não inclua `+`, espaços ou traços.
-
-Salve no nano com `Ctrl + O`, confirme com Enter e saia com `Ctrl + X`. Siga as instruções exibidas no terminal para conectar o WhatsApp em **Aparelhos conectados**. Nunca compartilhe seu código de pareamento.
-
-## Atualizar o bot
-
-Dentro da pasta do projeto:
+## Atualizar
 
 ```bash
+Ctrl + C
 git pull origin main
 npm install
 npm run check
 npm start
 ```
 
-Se houver alterações locais que impeçam o `git pull`, faça backup do que deseja preservar antes de descartar ou substituir arquivos.
+## Dados locais e segurança
 
-## Sessão, dados e segurança
-
-- A sessão do WhatsApp é armazenada localmente em `sessions/`.
-- Configurações, avisos e notas ficam em `data/`.
-- **Não envie o arquivo `.env`, a pasta `sessions/` ou credenciais para o GitHub.**
-- Não compartilhe códigos de pareamento, chaves de API ou arquivos de sessão.
-- Se apagar a pasta do projeto, faça uma cópia segura do `.env` e da sessão antes. O GitHub não guarda esses arquivos privados.
-
-## Verificação
-
-Execute `npm run check` para validar a sintaxe JavaScript. O GitHub Actions também executa a checagem em pushes e pull requests. Isso não substitui um teste real de conexão com o WhatsApp.
+- A sessão do WhatsApp fica em `sessions/`.
+- Dados de grupos e usuários ficam em `data/`.
+- Não compartilhe a pasta `sessions/` nem cópias personalizadas de `src/config.js` que contenham dados pessoais.
+- Nunca publique códigos de pareamento ou credenciais.

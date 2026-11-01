@@ -1,4 +1,4 @@
-import '../legacy-commands/fun.js';
+import '../../legacy-commands/fun.js';
 import { getCommand, registerCommand } from '../../handler.js';
 
 const commandName = "escolher";

@@ -1,4 +1,4 @@
-import '../legacy-commands/group.js';
+import '../../legacy-commands/group.js';
 import { getCommand, registerCommand } from '../../handler.js';
 
 const commandName = "infogrupo";

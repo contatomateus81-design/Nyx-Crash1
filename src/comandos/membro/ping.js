@@ -1,20 +1,7 @@
-import '../../legacy-commands/basic.js';
-import { getCommand, registerCommand } from '../../handler.js';
-
-const commandName = "ping";
-const implementation = getCommand(commandName);
-
-registerCommand({
-  name: commandName,
-  aliases: [],
-  role: "membro",
-  async execute(ctx) {
-    switch (ctx.command) {
-      case commandName:
-        if (!implementation) throw new Error('Implementação não encontrada: ' + commandName);
-        return implementation.execute(ctx);
-      default:
-        return ctx.reply('Comando não reconhecido neste arquivo.');
-    }
-  },
-});
+export default {
+  name: "ping",
+  description: "Testa a resposta da Nyx.",
+  commands: ["ping"],
+  usage: "!ping",
+  async handle({ reply }) { await reply("Pong! 🏓 Nyx está online."); }
+};

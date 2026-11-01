@@ -1,20 +1,12 @@
-import '../../legacy-commands/fun.js';
-import { getCommand, registerCommand } from '../../handler.js';
-
-const commandName = "escolher";
-const implementation = getCommand(commandName);
-
-registerCommand({
-  name: commandName,
-  aliases: ["choose"],
-  role: "membro",
-  async execute(ctx) {
-    switch (ctx.command) {
-      case commandName:
-        if (!implementation) throw new Error('Implementação não encontrada: ' + commandName);
-        return implementation.execute(ctx);
-      default:
-        return ctx.reply('Comando não reconhecido neste arquivo.');
-    }
-  },
-});
+import { config } from "../../config.js";
+export default {
+  name: "escolher",
+  description: "Escolhe uma opção aleatória.",
+  commands: ["escolher", "choose"],
+  usage: "!escolher opção 1 | opção 2",
+  async handle({ reply, args }) {
+    const options = args.join(" ").split("|").map(item => item.trim()).filter(Boolean);
+    if (options.length < 2) return reply(`Uso: ${config.prefix}escolher opção 1 | opção 2`);
+    await reply(`🎲 Minha escolha: *${options[Math.floor(Math.random() * options.length)]}*`);
+  }
+};

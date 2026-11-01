@@ -1,5 +1,5 @@
 import { config } from "./config.js";
-import { getDelegatedOwners } from "./store.js";
+import { getDelegatedOwners, isBotPaused } from "./store.js";
 import { getGroupContext } from "./utils.js";
 
 const commands = new Map();
@@ -139,6 +139,11 @@ export async function handleMessage(sock, message) {
     } catch (error) {
       console.warn("[command:reaction] Não foi possível reagir à mensagem:", error?.message ?? error);
     }
+  }
+
+  if (await isBotPaused() && !context.isOwner) {
+    await context.reply(`⏸️ ${config.name} está temporariamente pausado pelo dono. Tente novamente mais tarde.`);
+    return;
   }
 
   if (!(await authorize(command, context))) return;

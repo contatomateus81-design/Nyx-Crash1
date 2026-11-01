@@ -49,10 +49,10 @@ async function checkBinary(binary, args) {
 }
 
 async function checkPiper() {
-  const model = process.env.PIPER_MODEL?.trim();
+  const model = config.piperModel?.trim();
   if (!model) return '⚪ Não configurado';
 
-  const binary = process.env.PIPER_BIN?.trim() || 'piper';
+  const binary = config.piperBin?.trim() || 'piper';
   const [binaryAvailable, modelAvailable] = await Promise.all([
     checkBinary(binary, ['--help']),
     access(resolve(model)).then(() => true, () => false),
@@ -71,7 +71,7 @@ registerCommand({
     const memory = process.memoryUsage();
     const [delegatedOwners, ffmpegAvailable, piperStatus] = await Promise.all([
       getDelegatedOwners(),
-      checkBinary(process.env.FFMPEG_BIN?.trim() || 'ffmpeg', ['-version']),
+      checkBinary(config.ffmpegBin?.trim() || 'ffmpeg', ['-version']),
       checkPiper(),
     ]);
 
